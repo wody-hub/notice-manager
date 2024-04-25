@@ -1,0 +1,19 @@
+
+service:
+  file:
+    path:
+      home: /Users/jaeyo/Project/codetest/notice-manager/files
+
+logging:
+  level:
+    root: DEBUG
+    jdbc:
+      resultset: DEBUG
+      resultsettable: DEBUG
+      audit: DEBUG
+      sqlonly: DEBUG
+      sqltiming: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: DEBUG
+    org.hibernate.type: DEBUG
+    com.project.manager: DEBUG
