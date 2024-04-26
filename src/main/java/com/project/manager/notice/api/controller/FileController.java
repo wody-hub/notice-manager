@@ -7,12 +7,15 @@ import com.project.manager.notice.api.vo.FileResVo;
 import com.project.manager.notice.config.response.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -47,16 +50,18 @@ public class FileController {
      * @return 다운로드 파일
      */
     @GetMapping("/manager/file/{id}")
-    public ResponseEntity<UrlResource> downloadFile(@PathVariable("id") Long id) throws MalformedURLException {
-//        final var info = this.fileService.getFileForDownload(imgMapSn);
-//
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        httpHeaders.setContentDispositionFormData("attachment", new URLEncoder().encode(info.getImgNm(), StandardCharsets.UTF_8));
-//        httpHeaders.set("Content-Transfer-Encoding", "binary");
-//
-//        return new ResponseEntity<>(new UrlResource(info.getImgLink()), httpHeaders, HttpStatus.OK);
-        return null;
+    public ResponseEntity<Resource> downloadFile(@PathVariable("id") Long id) {
+        final var info = this.fileService.downloadFile(id);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode(info.getFileName(), StandardCharsets.UTF_8));
+        httpHeaders.set("Content-Transfer-Encoding", "binary");
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .headers(httpHeaders)
+                .body(info.getResource());
     }
 
     /**

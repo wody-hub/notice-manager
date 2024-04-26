@@ -30,5 +30,7 @@ public class NoticeResVo {
 
     private LocalDateTime endAt;
 
+    private Long views;
+
     private List<FileResVo> fileList;
 }

@@ -42,11 +42,12 @@ public class NoticeService {
     /**
      * 공지사항 등록
      *
-     * @param noticeReqVo 공지사항
+     * @param noticeReqVo 등록할 공지사항 정보
      */
     @Transactional
     public void saveNotice(NoticeReqVo noticeReqVo) {
         final var notice = this.modelMapper.map(noticeReqVo, Notice.class);
+        notice.setViews(0L);
         this.noticeRepository.save(notice);
 
         final var fileIdList = noticeReqVo.getFileIdList();
@@ -89,8 +90,13 @@ public class NoticeService {
      * @param id 공지사항 ID
      * @return 공지사항 상세 정보
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public NoticeResVo findNoticeDetail(Long id) {
+
+        // 조회수 증가
+        this.noticeRepository.increaseViews(id);
+
+        // 공지사항 정보 조회
         final var notice = this.findNoticeById(id);
         final var noticeRes = this.modelMapper.map(notice, NoticeResVo.class);
 
@@ -104,5 +110,15 @@ public class NoticeService {
         }
 
         return noticeRes;
+    }
+
+    /**
+     * 공지사항 삭제
+     *
+     * @param id 공지사항 ID
+     */
+    @Transactional
+    public void deleteNotice(Long id) {
+        this.noticeRepository.deleteById(id);
     }
 }

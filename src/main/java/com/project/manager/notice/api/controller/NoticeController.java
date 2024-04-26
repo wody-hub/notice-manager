@@ -37,7 +37,7 @@ public class NoticeController {
      */
     @PostMapping("/manager/notice")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<?> saveNotice(@RequestBody @Valid NoticeReqVo notice, BindingResult bindingResult) {
+    public Response<Void> saveNotice(@RequestBody @Valid NoticeReqVo notice, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new DataInvalidException(bindingResult);
         }
@@ -54,7 +54,7 @@ public class NoticeController {
      */
     @PutMapping("/manager/notice")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<?> updateNotice(@RequestBody @Valid NoticeModVo notice, BindingResult bindingResult) {
+    public Response<Void> updateNotice(@RequestBody @Valid NoticeModVo notice, BindingResult bindingResult) {
         this.noticeModValidator.validate(notice, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new DataInvalidException(bindingResult);
@@ -72,5 +72,18 @@ public class NoticeController {
     @GetMapping("/manager/notice/{id}")
     public Response<NoticeResVo> getNotice(@PathVariable Long id) {
         return Response.success(this.noticeService.findNoticeDetail(id));
+    }
+
+
+    /**
+     * 공지사항 상세 정보 조회
+     *
+     * @param id 공지사항 ID
+     * @return 공지사항 상세 정보
+     */
+    @DeleteMapping("/manager/notice/{id}")
+    public Response<Void> deleteNotice(@PathVariable Long id) {
+        this.noticeService.deleteNotice(id);
+        return Response.success();
     }
 }

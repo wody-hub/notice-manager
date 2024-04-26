@@ -38,6 +38,9 @@ public class Notice {
     @Column(name = "end_at")
     private LocalDateTime endAt;
 
+    @Column(name = "views")
+    private Long views;
+
     @OneToMany(mappedBy = "notice", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<NoticeFile> noticeFiles;
 }

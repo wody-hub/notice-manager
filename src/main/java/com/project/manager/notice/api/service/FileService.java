@@ -4,9 +4,9 @@ import com.project.manager.notice.api.domain.file.File;
 import com.project.manager.notice.api.domain.file.FileRepository;
 import com.project.manager.notice.api.exception.BadRequestException;
 import com.project.manager.notice.api.exception.RequestFileNotFoundException;
+import com.project.manager.notice.api.vo.FileDownloadResVo;
 import com.project.manager.notice.api.vo.FileReqVo;
 import com.project.manager.notice.api.vo.FileResVo;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -140,25 +138,34 @@ public class FileService {
         this.fileRepository.deleteById(id);
     }
 
+    /**
+     * 다운로드 하기 위한 파일 정보 조회
+     *
+     * @param id 파일 ID
+     * @return 파일 다운로드 정보
+     */
     @Transactional(readOnly = true)
-    public Resource downloadFile(Long id) {
+    public FileDownloadResVo downloadFile(Long id) {
         final var file = this.fileRepository.findById(id).orElseThrow(() -> new RequestFileNotFoundException("파일을 찾을 수 없습니다."));
+        final var originalName = file.getFileOriginalName();
 
-        String uploadedDate = file.getCreatedDate().toLocalDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
-        String filename = file.getSaveName();
-        Path filePath = Paths.get(uploadPath, uploadedDate, filename);
+        final var filePath = Paths.get(file.getFilePath(), file.getFileName());
         try {
             Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists() == false || resource.isFile() == false) {
-                throw new RuntimeException("file not found : " + filePath.toString());
+            if (!resource.exists() || !resource.isFile()) {
+                if (log.isErrorEnabled()) {
+                    log.error("file not found : {}", filePath);
+                }
+
+                throw new RequestFileNotFoundException("파일을 찾을 수 없습니다.");
             }
-            return resource;
+            return FileDownloadResVo.builder()
+                    .fileName(originalName)
+                    .resource(resource)
+                    .build();
         } catch (MalformedURLException e) {
             throw new RuntimeException("file not found : " + filePath.toString());
         }
-        출처:
-        https:
-//congsong.tistory.com/45 [Let's develop:티스토리]
     }
 
 }
