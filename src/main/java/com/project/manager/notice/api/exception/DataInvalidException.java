@@ -92,7 +92,7 @@ public class DataInvalidException extends RuntimeException {
 
     /**
      * @author 정재요
-     * @date 2023. 03. 28
+     * @date 2024. 04. 24
      */
     public record ErrorData(
             @JsonIgnore // 결과에 필드값은 노출하지 않음.

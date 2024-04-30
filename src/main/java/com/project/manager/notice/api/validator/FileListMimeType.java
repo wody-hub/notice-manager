@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * 파일의 허용된 mime type 검사
  *
  * @author 정재요
- * @date 2023. 05. 11
+ * @date 2024. 04. 24
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

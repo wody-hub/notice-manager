@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * 각 파일의 용량 체크
  *
  * @author 정재요
- * @date 2023. 05. 11
+ * @date 2024. 04. 24
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
