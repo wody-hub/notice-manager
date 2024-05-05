@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 파일 처리 controller
@@ -26,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-public class FileController {
+public class FileController implements Comparable<FileService> {
 
     private final FileService fileService;
 
@@ -36,11 +38,12 @@ public class FileController {
      * @return 등록된 상품 이미지 정보
      */
     @PostMapping("/manager/file")
+    @ResponseStatus(HttpStatus.CREATED)
     public Response<List<FileResVo>> uploadFile(@Valid FileReqVo reqDto, BindingResult errors) {
         if (errors.hasErrors()) {
             throw new DataInvalidException(errors);
         }
-        return Response.success(this.fileService.saveFile(reqDto));
+        return Response.success(this.fileService.saveFile(reqDto).stream().collect(Collectors.toList()));
     }
 
     /**
@@ -74,5 +77,10 @@ public class FileController {
     public Response<Void> deleteFile(@PathVariable("id") Long id) {
         this.fileService.deleteFile(id);
         return Response.success();
+    }
+
+    @Override
+    public int compareTo(FileService fileService) {
+        return 0;
     }
 }

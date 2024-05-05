@@ -36,6 +36,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.junit.vintage:junit-vintage-engine'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // 맥에서 빌드시 사용.
     if (osdetector.arch == 'aarch_64') {
@@ -43,6 +46,6 @@ dependencies {
     }
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }

@@ -28,7 +28,7 @@ public class FileReqVo {
     @FileListSize(maxSize = 20)
     @FileListMimeType(mimeTypes = {"image/gif", "image/x-icon", "image/jpeg", "image/jpg", "image/tiff", "image/webp", "image/png", "image/svg+xml", "image/x-ms-bmp", "image/vnd.microsoft.icon", // 이미지
             "video/mp4", "video/mpeg", "video/quicktime", "video/webm", "video/x-flv", "video/x-m4v", "video/x-mng", "video/x-ms-asf", "video/x-ms-wmv", "video/x-msvideo", // 동영상
-            "application/pdf", "application/vnd.ms-powerpoint", "application/x-rar-compressed", "application/x-tar",
+            "application/pdf", "application/vnd.ms-powerpoint", "application/x-rar-compressed", "application/x-tar", "text/plain",
             "application/zip", "application/vnd.ms-excel", "application/msword", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/x-hwp", "application/vnd.hancom.hwp", "application/haansofthwp", "application/vnd.hancom.hwpx", "application/haansofthwpx"
     }, message = "해당 파일은 업로드 할 수 없습니다.")
